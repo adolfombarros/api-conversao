@@ -7,6 +7,13 @@ const swaggerDocument = YAML.load('./swagger.yaml');
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument)); 
 
+app.get("/", (req, res) => {
+
+  var result = { "result": "ok" };
+  res.json(result);
+
+});
+
 app.get('/fahrenheit/:valor/celsius', (req, res) => {
 
     let valor = req.params.valor;

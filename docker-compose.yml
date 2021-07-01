@@ -1,0 +1,23 @@
+version: "3"
+
+networks:
+  web:
+    external: true
+
+services:
+#api-conversao
+  api-conversao:
+    container_name: api-conversao
+    image: adolfombarros/api-conversao:latest
+    restart: unless-stopped
+    networks:
+      - web
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.api-conversao-rtr.entrypoints=http"
+      - "traefik.http.routers.api-conversao-rtr.rule=Host(`localhost`)"
+      ## Middlewares
+      - "traefik.http.routers.api-conversao-rtr.middlewares=chain-no-auth@file" # No Authentication
+      ## HTTP Services
+      - "traefik.http.services.api-conversao-svc.loadbalancer.server.port=8080"

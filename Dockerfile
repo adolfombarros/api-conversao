@@ -1,27 +1,10 @@
-FROM node:alpine
-
+FROM node:lts-alpine
 RUN mkdir -p /home/node/app/node_modules && chown -R node:node /home/node/app
-
-WORKDIR /home/node/app
-
-COPY package*.json ./
-
-RUN npm install
-
-RUN npm install -g npm to update
-
-COPY . .
-
-COPY --chown=node:node . .
-
 USER node
-
-EXPOSE 3001
-
-#DEFAULT
-#HEALTHCHECK CMD curl --fail http://localhost:3001 || exit 1
-
-#CUSTOM
+WORKDIR /home/node/app
+COPY --chown=node:node package*.json ./
+RUN npm install
+COPY --chown=node:node . .
+EXPOSE 8080
 HEALTHCHECK --interval=12s --timeout=12s --start-period=30s CMD node healthcheck.js
-
-CMD [ "node", "app.js" ]
+CMD  chown -R node /home/node/app && node index.js
